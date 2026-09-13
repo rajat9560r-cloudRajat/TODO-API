@@ -35,4 +35,14 @@ def delete_todo(id : int, db : Session = Depends(get_db)):
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-
+@app.patch("/todos/{id}", response_model=schemas.Response)
+def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db)):
+    todo = db.query(models.Todo).filter(models.Todo.id==id).first()
+    if not todo:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail="nahi h be")
+    new_data = data.model_dump(exclude_unset=True)
+    for key, value in new_data.items():
+        setattr(todo, key, value )
+    db.commit()
+    db.refresh(todo)
+    return todo
