@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-
-
 class Validation(BaseModel):
     kaam : str
     name : str
@@ -13,3 +11,6 @@ class Response(BaseModel):
 class Update(BaseModel):
     kaam : str | None = None
     name : str | None = None
+
+class Put(Validation):
+    pass
