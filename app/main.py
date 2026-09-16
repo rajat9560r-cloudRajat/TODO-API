@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException, Response, status
 from .database import get_db, engine
 from sqlalchemy.orm import Session
-from . import models, schemas
+from . import models, schemas, utils
 from typing import List
 from sqlalchemy.exc import IntegrityError
+
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
@@ -96,6 +97,8 @@ def get_by_id(id:int, db:Session=Depends(get_db)):
 @app.post("/users",status_code=status.HTTP_201_CREATED ,response_model=schemas.UserResponse)
 def create_user(data:schemas.UserValidation, db:Session=Depends(get_db)):
     try:
+        hashed_password = utils.hash(data.password)
+        data.password = hashed_password
         user = models.User(**data.model_dump())
         db.add(user)
         db.commit()
