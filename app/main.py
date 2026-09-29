@@ -125,3 +125,5 @@ def update_user(id:int,data:schemas.UserUpdate , db:Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
     return user
+
+
