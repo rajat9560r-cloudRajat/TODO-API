@@ -7,7 +7,6 @@ class Todo(Base):
     todo = Column(String, unique=True,nullable=False)
     created_at = Column(TIMESTAMP, nullable = False, server_default=func.now())
 
-
 class User(Base):
     __tablename__="usertodo"
     id = Column(Integer, primary_key = True, nullable = False)
