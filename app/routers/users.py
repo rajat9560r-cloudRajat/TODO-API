@@ -49,6 +49,7 @@ def delete_user(id:int, db:Session=Depends(get_db)):
 @router.patch("/{id}", response_model=schemas.UserResponse)
 def update_user(id:int,data:schemas.UserUpdate , db:Session = Depends(get_db)):
     user = user_info_or_error(id, db)
+    
     new_data = data.model_dump(exclude_unset=True)
     new_hash = utils.hash(new_data["password"])
     new_data["password"] = new_hash
