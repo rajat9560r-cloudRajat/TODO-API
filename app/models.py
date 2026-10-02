@@ -10,6 +10,7 @@ class Todo(Base):
 class User(Base):
     __tablename__="usertodo"
     id = Column(Integer, primary_key = True, nullable = False)
+    name = Column(Integer, nullable = False)
     email = Column(String,unique=True, nullable = False)
     password = Column(String, nullable = False)
     created_at = Column(TIMESTAMP, nullable = False, server_default=func.now())
