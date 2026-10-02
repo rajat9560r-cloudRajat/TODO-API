@@ -1,10 +1,6 @@
-from fastapi import FastAPI, Depends, HTTPException, Response, status, APIRouter
-from .database import get_db, engine
-from sqlalchemy.orm import Session
-from . import models, schemas, utils
-from typing import List
-from sqlalchemy.exc import IntegrityError
-
+from fastapi import FastAPI 
+from .database import engine
+from . import models
 from .routers import todos, users
 
 models.Base.metadata.create_all(bind=engine)
