@@ -21,16 +21,17 @@ class Put(Validation):
 
 #===============USER SCHEMA================================
 class UserValidation(BaseModel):
-   
+    name : str
     email : EmailStr
     password : str
 
 class UserResponse(BaseModel):
     id : int
+    name : str
     email : EmailStr
-
+    
 
 class UserUpdate(BaseModel):
-    
+    name : str | None = None
     email : EmailStr| None = None
     password : str| None = None
