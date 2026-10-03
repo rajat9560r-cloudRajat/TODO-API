@@ -9,14 +9,6 @@ ALGORITHM = os.getenv("ALGO")
 SECRET_KEY = os.getenv("SECRET_KEY")
 EXPIRATION_TIME  = 30
 
-
-
-
-
-
-
-
-
 def create_access_token(data : dict):
     payload = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(minutes = EXPIRATION_TIME)

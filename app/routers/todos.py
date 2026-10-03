@@ -5,7 +5,7 @@ from ..database import get_db
 from sqlalchemy.orm import Session
 from ..helper_func import todo_info_or_error
 from sqlalchemy.exc import IntegrityError
-
+from . import auth
 router = APIRouter(
     prefix = '/todos',
     tags = ['tasks']
