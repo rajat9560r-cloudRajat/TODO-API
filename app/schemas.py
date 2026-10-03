@@ -35,3 +35,13 @@ class UserUpdate(BaseModel):
     name : str | None = None
     email : EmailStr| None = None
     password : str| None = None
+
+#========================login==============
+class UserCredential(BaseModel):
+    email : EmailStr
+    password : str
+
+
+class LoginResponse(BaseModel):
+    access_token : str
+    type : str
