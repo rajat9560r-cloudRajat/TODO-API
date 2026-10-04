@@ -22,7 +22,7 @@ def create_access_token(data : dict):
     expire = datetime.utcnow() + timedelta(minutes = EXPIRATION_TIME)
     payload["exp"] = expire
     access_token = jwt.encode(payload, SECRET_KEY, algorithm = ALGORITHM)
-    print(payload)
+    
     return access_token
 
 def verify_access_token(token : str, credentials_exception):

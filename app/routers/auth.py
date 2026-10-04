@@ -1,8 +1,11 @@
+#libraries
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from .. import models, utils, schemas, oauth2
 from sqlalchemy.orm import Session
 from ..database import get_db
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+
+#router
 router = APIRouter(
     prefix = '/login',
     tags = ['authentication']
@@ -14,6 +17,7 @@ parse, validate, and secure the user credentials (username and password) sent du
 request.Instead of creating a custom Pydantic model to handle login data'''
 #in short- no schema needed, no json, only form-data, email no - username yes
 
+#user_login
 @router.post("", response_model = schemas.LoginResponse)
 def user_login(credentials:OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.email==credentials.username).first()
@@ -25,7 +29,9 @@ def user_login(credentials:OAuth2PasswordRequestForm = Depends(), db : Session =
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail = "Idk but stmg is wrong with your credentials")
     
     token = oauth2.create_access_token({"id": user.id})
+    
     print("Name of the user accessing: ",user.name)
+    #just for curiosity
     return {"access_token":token, "type":"Bearer"}
 
 
