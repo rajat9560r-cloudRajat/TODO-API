@@ -9,8 +9,9 @@ router = APIRouter(
 )
 
 '''
-The OAuth2PasswordRequestForm is a built-in FastAPI dependency [1] class used to automatically parse, validate, and secure the user credentials (username and password) sent during a login request.
-Instead of creating a custom Pydantic model to handle login data'''
+The OAuth2PasswordRequestForm is a built-in FastAPI dependency [1] class used to automatically 
+parse, validate, and secure the user credentials (username and password) sent during a login
+request.Instead of creating a custom Pydantic model to handle login data'''
 
 @router.post("", response_model = schemas.LoginResponse)
 def user_login(credentials:OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
