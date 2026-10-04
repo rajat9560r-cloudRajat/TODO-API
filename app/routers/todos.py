@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from typing import List
-from .. import models, schemas
+from .. import models, schemas, oauth2
 from ..database import get_db
 from sqlalchemy.orm import Session
 from ..helper_func import todo_info_or_error
 from sqlalchemy.exc import IntegrityError
-from . import auth
+
 router = APIRouter(
     prefix = '/todos',
     tags = ['tasks']
@@ -25,19 +25,22 @@ def get_by_id(id:int, db : Session = Depends(get_db)):
 
 
 @router.post("", status_code = status.HTTP_201_CREATED,response_model=schemas.Response)
-def create_todo(data : schemas.Validation, db : Session = Depends(get_db)):
+def create_todo(data : schemas.Validation, db : Session = Depends(get_db), 
+                get_current_user = Depends(oauth2.get_current_user)):
+    print("Id of the user accessing: ",get_current_user)
     try:
         todo = models.Todo(**data.model_dump())
         db.add(todo)
         db.commit()
-        db.refresh(todo)
+        db.refresh(todo) 
         return todo
     except IntegrityError:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="TODO ALREADY EXISTS!!")
-        
+        return HTTPException(status_code=status.HTTP_409_CONFLICT, detail="TODO ALREADY EXISTS!!")
+      
 
 @router.delete("/{id}")
-def delete_todo(id : int, db : Session = Depends(get_db)):
+def delete_todo(id : int, db : Session = Depends(get_db), 
+                get_current_user = Depends(oauth2.get_current_user)):
     todo = todo_info_or_error(id, db)
     db.delete(todo)
     db.commit()
@@ -45,7 +48,8 @@ def delete_todo(id : int, db : Session = Depends(get_db)):
 
 
 @router.patch("/{id}", response_model=schemas.Response)
-def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db)):
+def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db), 
+                get_current_user = Depends(oauth2.get_current_user)):
     todo = todo_info_or_error(id, db)
     new_data = data.model_dump(exclude_unset=True)
     for key, value in new_data.items():
@@ -56,7 +60,8 @@ def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db)):
 
 
 @router.put("/{id}", response_model=schemas.Put)
-def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db)):
+def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db), 
+                get_current_user = Depends(oauth2.get_current_user)):
     todo = todo_info_or_error(id, db)
     new_data = data.model_dump()
     for key, value in new_data.items():
