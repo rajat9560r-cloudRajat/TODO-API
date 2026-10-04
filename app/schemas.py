@@ -37,9 +37,7 @@ class UserUpdate(BaseModel):
     password : str| None = None
 
 #========================login==============
-class UserCredential(BaseModel):
-    email : EmailStr
-    password : str
+
 
 
 class LoginResponse(BaseModel):
