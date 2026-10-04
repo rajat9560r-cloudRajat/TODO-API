@@ -19,7 +19,7 @@ EXPIRATION_TIME  = 30
 
 def create_access_token(data : dict):
     payload = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(minutes = EXPIRATION_TIME)
+    expire = datetime.utcnow() + timedelta(minutes = EXPIRATION_TIME)
     payload["exp"] = expire
     access_token = jwt.encode(payload, SECRET_KEY, algorithm = ALGORITHM)
     print(payload)
@@ -32,9 +32,10 @@ def verify_access_token(token : str, credentials_exception):
         if not user_id:
             raise credentials_exception   
     except InvalidTokenError:
-        credentials_exception   
+        credentials_exception  
+    return user_id
 
 def get_current_user(token : str = Depends(lee_aao_token)):
     credentials_exception = HTTPException(status.HTTP_401_UNAUTHORIZED, 
                 detail = "Credentials didn't match, try again", headers = {"WWW-Authenticate":"Bearer"})
-    return verify_access_token(credentials_exception)
+    return verify_access_token(token, credentials_exception)
