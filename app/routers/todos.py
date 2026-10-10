@@ -15,8 +15,8 @@ router = APIRouter(
 
 #get_all
 @router.get("", response_model=List[schemas.Response])
-def get_all(db : Session = Depends(get_db)):
-    tasks = db.query(models.Todo).all()
+def get_all(db : Session = Depends(get_db), get_current_user = Depends(oauth2.get_current_user)):
+    tasks = db.query(models.Todo).filter(models.Todo.owner_id==get_current_user).all()
     if not tasks:
         return []
     return tasks
