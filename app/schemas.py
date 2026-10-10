@@ -13,6 +13,10 @@ class UserResponse(BaseModel):
     name : str
     email : EmailStr
 
+    class config:
+        from_attributes = False
+
+
 class UserUpdate(BaseModel):
     name : str | None = None
     email : EmailStr| None = None
@@ -29,7 +33,10 @@ class Response(BaseModel):
     created_at:datetime
     owner_id : int
     owner : UserResponse
-    
+
+    class config:
+        from_attributes = False
+
 class Update(BaseModel):
     todo : str | None = None
     
