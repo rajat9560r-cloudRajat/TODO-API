@@ -16,7 +16,6 @@ class UserResponse(BaseModel):
     class config:
         from_attributes = False
 
-
 class UserUpdate(BaseModel):
     name : str | None = None
     email : EmailStr| None = None

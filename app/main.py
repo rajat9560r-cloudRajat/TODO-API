@@ -4,6 +4,7 @@ from . import models
 from .routers import todos, users, auth
 
 models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 app.include_router(todos.router)
