@@ -23,8 +23,11 @@ def get_all(db : Session = Depends(get_db), get_current_user = Depends(oauth2.ge
 
 #get_by_id
 @router.get("/{id}", response_model=schemas.Response)
-def get_by_id(id:int, db : Session = Depends(get_db)):
-    return todo_info_or_error(id, db)
+def get_by_id(id:int, db : Session = Depends(get_db), get_current_user = Depends(oauth2.get_current_user)):
+    todo = todo_info_or_error(id, db)
+    if todo.owner_id != get_current_user:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail = "Not yours lil boy!")
+    return todo
 
 #create_new
 @router.post("", status_code = status.HTTP_201_CREATED,response_model=schemas.Response)
@@ -32,7 +35,7 @@ def create_todo(data : schemas.Validation, db : Session = Depends(get_db),
                 get_current_user = Depends(oauth2.get_current_user)):
     print("Id of the user accessing: ",get_current_user)
     try:
-        todo = models.Todo(**data.model_dump())
+        todo = models.Todo(owner_id=get_current_user, **data.model_dump())
         db.add(todo)
         db.commit()
         db.refresh(todo) 
@@ -46,6 +49,9 @@ def create_todo(data : schemas.Validation, db : Session = Depends(get_db),
 def delete_todo(id : int, db : Session = Depends(get_db), 
                 get_current_user = Depends(oauth2.get_current_user)):
     todo = todo_info_or_error(id, db)
+    if todo.owner_id != get_current_user:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail = "Not yours lil boy!")
+
     db.delete(todo)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -55,6 +61,8 @@ def delete_todo(id : int, db : Session = Depends(get_db),
 def update_todo(id : int,data : schemas.Update ,db : Session = Depends(get_db), 
                 get_current_user = Depends(oauth2.get_current_user)):
     todo = todo_info_or_error(id, db)
+    if todo.owner_id != get_current_user:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail = "Not yours lil boy!")
     new_data = data.model_dump(exclude_unset=True)
     for key, value in new_data.items():
         setattr(todo, key, value )
