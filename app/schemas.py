@@ -10,6 +10,7 @@ class Response(BaseModel):
     id : int
     todo : str
     created_at:datetime
+    owner_id : int
     
 
 class Update(BaseModel):
