@@ -2,25 +2,7 @@ from pydantic import BaseModel
 from pydantic import EmailStr
 from datetime import datetime
 
-class Validation(BaseModel):
-    todo : str
-    
-
-class Response(BaseModel):
-    id : int
-    todo : str
-    created_at:datetime
-    owner_id : int
-    
-
-class Update(BaseModel):
-    todo : str | None = None
-    
-
-class Put(Validation):
-    pass
-
-#===============USER SCHEMA================================
+#===============USER_SCHEMA================================
 class UserValidation(BaseModel):
     name : str
     email : EmailStr
@@ -30,16 +12,31 @@ class UserResponse(BaseModel):
     id : int
     name : str
     email : EmailStr
-    
 
 class UserUpdate(BaseModel):
     name : str | None = None
     email : EmailStr| None = None
     password : str| None = None
 
-#========================login==============
+#===============TODO_SCHEMA================================
 
+class Validation(BaseModel):
+    todo : str
 
+class Response(BaseModel):
+    id : int
+    todo : str
+    created_at:datetime
+    owner_id : int
+    owner : UserResponse
+    
+class Update(BaseModel):
+    todo : str | None = None
+    
+class Put(Validation):
+    pass
+
+#===============AUTH_SCHEMA================================
 
 class LoginResponse(BaseModel):
     access_token : str
