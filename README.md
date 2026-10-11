@@ -73,3 +73,4 @@ API docs will be available at:
 
 ## Notes
 This project is a beginner-friendly backend API for learning CRUD operations, authentication, and database integration in Python. Updating over learning.
+
