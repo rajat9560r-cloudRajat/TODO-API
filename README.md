@@ -56,13 +56,12 @@ ALGORITHM = "HS256"
 ```
 
 ## Run
-```bash
+```powershell
 uvicorn app.main:app --reload
 ```
 
 API docs will be available at:
-- `http://localhost:8000/docs`
-- `http://localhost:8000/redoc`
+- `http://localhost:8000/docs`---> SwaggerUI
 
 ## Main Endpoints
 - `POST /users/` - create user
@@ -73,4 +72,4 @@ API docs will be available at:
 - `DELETE /todos/{id}` - delete todo
 
 ## Notes
-This project is a beginner-friendly backend API for learning CRUD operations, authentication, and database integration in Python.
+This project is a beginner-friendly backend API for learning CRUD operations, authentication, and database integration in Python. Updating over learning.
